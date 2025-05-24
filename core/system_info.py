@@ -109,7 +109,7 @@ def main():
         log_system_info()
         log_listening_ports()
         log_users_and_groups()
-        # log_suid_sgid_files()  # Si necesitas incluirlo, descomenta
+        log_suid_sgid_files()
 
         log_services()
 
