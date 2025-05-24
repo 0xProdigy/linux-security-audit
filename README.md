@@ -1,52 +1,84 @@
 # 🛡️ Linux Security Audit
 
-Linux Security Audit es una herramienta de línea de comandos escrita en Python que permite realizar una auditoría rápida y automatizada del estado de seguridad y configuración básica de un sistema Linux.
+**Linux Security Audit** es una herramienta de línea de comandos escrita en Python diseñada para realizar auditorías rápidas, sigilosas y automatizadas del estado de un sistema Linux.
 
-Este script genera un informe completo en texto plano, almacenado en la carpeta `/dev/shm/`, que cubre múltiples aspectos del sistema relacionados con el rendimiento, los servicios y la seguridad. Es ideal para administradores de sistemas, equipos DevSecOps o cualquier persona interesada en comprender el estado operativo y la exposición de su sistema Linux.
+Genera un informe completo en texto plano que cubre aspectos clave del sistema: recursos, usuarios, servicios, configuraciones sensibles y condiciones potencialmente inseguras. El log puede guardarse temporalmente en memoria (`/dev/shm/`) para evitar dejar rastros en disco.
 
 ---
 
-## ✅ ¿Qué analiza este script?
+## ✅ ¿Qué analiza esta herramienta?
 
-- **Información del sistema**: nombre del SO, versión del kernel, arquitectura y CPU.
-- **Uso de recursos**: consumo actual de CPU, RAM y disco.
-- **Red**: interfaces de red configuradas y puertos en escucha.
-- **Servicios**: servicios activos mediante `systemctl` y scripts en `/etc/init.d/`.
-- **Tareas programadas**: contenido del `crontab` del sistema.
-- **Usuarios y permisos**:
-  - Usuarios del sistema (`/etc/passwd`)
-  - Grupos (`/etc/group`)
-  - Configuración de `sudoers`
-- **Archivos críticos**:
-  - Archivos con permisos `SUID/SGID` que pueden representar riesgos de escalada de privilegios.
+- ### 🖥️ Información del sistema:
+  - Nombre del sistema operativo y versión del kernel.
+  - Arquitectura y procesador.
+  - Uso actual de CPU, memoria y disco.
+
+- ### 🌐 Red:
+  - Interfaces activas.
+  - Puertos en escucha (conexiones locales).
+
+- ### 🔧 Servicios:
+  - Servicios activos (`systemctl`).
+  - Scripts en `/etc/init.d/`.
+
+- ### ⏰ Tareas programadas:
+  - Revisión del `crontab` del sistema.
+
+- ### 👤 Usuarios y permisos:
+  - Usuarios definidos (`/etc/passwd`).
+  - Grupos del sistema (`/etc/group`).
+  - Análisis básico y sigiloso de privilegios (sin leer `/etc/sudoers` directamente).
+  - Listado de archivos en `/etc/sudoers.d/` (sin abrirlos, salvo permisos).
+
+- ### 🔍 Análisis de entorno:
+  - Variables de entorno expuestas.
+  - Shells por defecto de los usuarios.
+  - Aliases definidos por defecto en el sistema.
+
+- ### ⚠️ Comprobaciones de seguridad (vuln_checks):
+  - Usuario en grupos privilegiados.
+  - Directorios con permisos `world-writable` en `/tmp`, `/dev/shm`, etc.
+  - Versión del kernel (para identificación de posibles exploits).
 
 ---
 
 ## 💡 ¿Por qué es útil?
 
-Este script es una base sólida para integrarlo en pipelines de auditoría o revisiones de configuración en entornos Linux. Puede utilizarse para:
+Esta herramienta proporciona una base sólida para:
 
-- Crear snapshots del estado de un sistema.
-- Detectar configuraciones inseguras o cambios inesperados.
-- Aprender cómo inspeccionar manualmente elementos clave de la seguridad en Linux.
+- Revisiones post-explotación discretas.
+- Auditorías periódicas en entornos DevSecOps.
+- Análisis forense básico.
+- Estudiantes e investigadores que desean aprender cómo inspeccionar la seguridad de un sistema sin herramientas invasivas.
 
 ---
 
 ## ⚙️ Requisitos
 
+- Linux (cualquier distribución con utilidades básicas estándar)
 - Python 3.x
-- Linux con utilidades estándar (`top`, `df`, `ss`, `ip`, `systemctl`, etc.)
-- Permisos de superusuario para auditar completamente (sudo recomendado)
+- Utilidades del sistema: `top`, `df`, `ss`, `ip`, `systemctl`, etc.
+- Permisos root **no requeridos**, pero recomendados para inspección completa.
 
 ---
 
-## 🧠 Filosofía del proyecto
+## 🔐 Filosofía del proyecto
 
-- **Sigilo**: no genera tráfico ni actividad sospechosa.
-- **Nativo**: no usa librerías externas ni herramientas intrusivas.
-- **Versátil**: útil tanto para administradores como para investigadores de seguridad ofensiva.
+| Principio   | Descripción |
+|------------|-------------|
+| 🕵️ **Sigilo**     | Evita modificar el sistema o dejar rastros. Usa `/dev/shm` como ubicación temporal opcional. |
+| 🔌 **Nativo**     | No requiere librerías externas ni dependencias complejas. |
+| ⚔️ **Versátil**   | Útil tanto en auditorías defensivas como ofensivas. |
+| 🧱 **Modularidad** | Código organizado en módulos reutilizables (`system_info`, `environment_info`, `vuln_checks`, etc.) |
 
 ---
+
+## 📝 Uso
+
+```bash
+python3 audit.py -save      # Guarda el log en /dev/shm/audit-log.txt
+python3 audit.py -nosave    # Solo salida por consola (modo sigiloso)
+```
 
 ## 📁 Salida
 
@@ -54,3 +86,8 @@ Este script es una base sólida para integrarlo en pipelines de auditoría o rev
   
   ```bash
   /dev/shm/audit-log.txt
+
+## 🚀 Estado actual
+
+- 🟢 Estable y funcional.
+- 🔄 En desarrollo activo para agregar más controles discretos y personalización.
