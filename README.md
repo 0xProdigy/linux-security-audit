@@ -2,7 +2,7 @@
 
 Linux Security Audit es una herramienta de línea de comandos escrita en Python que permite realizar una auditoría rápida y automatizada del estado de seguridad y configuración básica de un sistema Linux.
 
-Este script genera un informe completo en texto plano, almacenado en la carpeta `logs/`, que cubre múltiples aspectos del sistema relacionados con el rendimiento, los servicios y la seguridad. Es ideal para administradores de sistemas, equipos DevSecOps o cualquier persona interesada en comprender el estado operativo y la exposición de su sistema Linux.
+Este script genera un informe completo en texto plano, almacenado en la carpeta `/dev/shm/`, que cubre múltiples aspectos del sistema relacionados con el rendimiento, los servicios y la seguridad. Es ideal para administradores de sistemas, equipos DevSecOps o cualquier persona interesada en comprender el estado operativo y la exposición de su sistema Linux.
 
 ---
 
