@@ -25,7 +25,7 @@ def stop_spinner(t):
     t.join()
 
 def log_or_print(text):
-    from core.system_info import SAVE_LOG, LOG_FILE
+    global SAVE_LOG, LOG_FILE
     if SAVE_LOG:
         with open(LOG_FILE, "a", encoding="utf-8") as f:
             f.write(text + "\n")

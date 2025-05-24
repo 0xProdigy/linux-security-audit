@@ -19,15 +19,18 @@ def log_users_and_groups():
         log_or_print(f"Could not read /etc/group: {e}")
 
     log_or_print("\n[Sudoers - /etc/sudoers and /etc/sudoers.d/]")
-    try:
-        with open("/etc/sudoers", "r") as sudo_file:
-            log_or_print("[/etc/sudoers]")
-            for line in sudo_file:
-                log_or_print(line.strip())
-    except PermissionError:
-        log_or_print("Could not read /etc/sudoers: Permission denied (requires sudo).")
-    except Exception as e:
-        log_or_print(f"Could not read /etc/sudoers: {e}")
+
+    sudoers_path = "/etc/sudoers"
+    if os.access(sudoers_path, os.R_OK):
+        try:
+            with open(sudoers_path, "r") as sudo_file:
+                log_or_print("[/etc/sudoers]")
+                for line in sudo_file:
+                    log_or_print(line.strip())
+        except Exception as e:
+            log_or_print(f"Could not read /etc/sudoers: {e}")
+    else:
+        log_or_print("No permission to read /etc/sudoers (requires root or sudo privileges).")
 
     try:
         log_or_print("\n[/etc/sudoers.d/ files]")
